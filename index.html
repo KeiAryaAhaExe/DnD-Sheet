@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Aha Sheet">
+<meta name="theme-color" content="#0d0a07">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Aha — Character Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>:root{--bg:#0d0a07;--bg2:#141009;--bg3:#1c160e;--card:#1e1710;--card2:#251e14;--border:#3a2e1e;--border2:#4e3d26;--gold:#c8a55a;--gold2:#e8c87a;--gold3:#f0d898;--red:#c04040;--blue:#5080c0;--green:#50a060;--text:#e8dcc8;--text2:#b8a888;--text3:#887868;--accent:#d4882a;--fc:'Cinzel',serif;--fp:'Crimson Pro',serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--fp);font-size:17px;background:var(--bg);color:var(--text);min-height:100vh;background-image:radial-gradient(ellipse at 20% 20%,rgba(200,165,90,0.04) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(200,80,40,0.03) 0%,transparent 50%)}.header{background:linear-gradient(180deg,#1a120a 0%,#0d0a07 100%);border-bottom:1px solid var(--border2);padding:18px 32px;display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.5)}.header-title{font-family:var(--fc);font-size:22px;font-weight:700;color:var(--gold2);letter-spacing:3px;text-transform:uppercase}.header-sub{font-size:13px;color:var(--text3);letter-spacing:1px}.save-btn{margin-left:auto;background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--fc);font-size:11px;letter-spacing:2px;padding:8px 18px;cursor:pointer;transition:all 0.2s;text-transform:uppercase}.save-btn:hover{background:var(--gold);color:var(--bg)}.save-btn.saved{border-color:var(--green);color:var(--green)}.tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;padding:0 16px}.tabs::-webkit-scrollbar{display:none}.tab{font-family:var(--fc);font-size:12px;letter-spacing:1.5px;color:var(--text3);padding:14px 20px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;text-transform:uppercase}.tab:hover{color:var(--text2)}.tab.active{color:var(--gold2);border-bottom-color:var(--gold2)}.content{padding:24px 32px;max-width:1100px;margin:0 auto}.panel{display:none}.panel.active{display:block;animation:fadeIn 0.3s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.section-title{font-family:var(--fc);font-size:12px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--border);padding:16px}.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}.field label{font-size:11px;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;font-family:var(--fc)}.field input,.field textarea,.field select{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--fp);font-size:17px;padding:7px 10px;outline:none;transition:border-color 0.2s;width:100%}.field input:focus,.field textarea:focus{border-color:var(--gold);background:#1a1408}.field input[readonly]{color:var(--gold2);border-color:transparent;background:transparent;cursor:default;font-weight:600}.field textarea{resize:vertical;min-height:60px}.stat-block{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat-item{background:var(--bg3);border:1px solid var(--border);padding:12px 8px;text-align:center;position:relative}.stat-name{font-family:var(--fc);font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}.stat-score input{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--text);font-family:var(--fp);font-size:22px;font-weight:600;text-align:center;width:60px;outline:none;padding:2px 0}.stat-score input:focus{border-color:var(--gold)}.stat-mod{font-size:13px;color:var(--gold2);margin-top:4px;font-weight:600}.resource-row{display:flex;gap:12px;margin-bottom:16px}.resource-box{flex:1;background:var(--bg3);border:1px solid var(--border);padding:12px}.resource-label{font-family:var(--fc);font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:8px}.resource-inputs{display:flex;align-items:center;gap:6px}.resource-inputs input{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--fp);font-size:18px;font-weight:600;text-align:center;width:52px;padding:5px;outline:none}.resource-inputs input:focus{border-color:var(--gold)}.resource-inputs .slash{color:var(--text3);font-size:18px}.resource-inputs .max-label{font-size:11px;color:var(--text3)}.resource-bar{height:3px;background:var(--border);margin-top:8px;border-radius:2px;overflow:hidden}.resource-bar-fill{height:100%;border-radius:2px;transition:width 0.3s}.hp-fill{background:linear-gradient(90deg,var(--red),#e06060)}.mp-fill{background:linear-gradient(90deg,var(--blue),#7090d0)}.will-fill{background:linear-gradient(90deg,var(--green),#70c080)}.defense-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.def-box{background:var(--bg3);border:1px solid var(--border);padding:10px;text-align:center}.def-label{font-family:var(--fc);font-size:9px;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}.def-value{font-size:22px;font-weight:600;color:var(--gold2)}.def-value input{background:transparent;border:none;color:var(--gold2);font-family:var(--fp);font-size:22px;font-weight:600;text-align:center;width:50px;outline:none;border-bottom:1px solid transparent}.def-value input:focus{border-bottom-color:var(--gold)}.skill-table{width:100%;border-collapse:collapse;font-size:16px}.skill-table th{font-family:var(--fc);font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}.skill-table td{padding:6px 10px;border-bottom:1px solid rgba(58,46,30,0.4)}.skill-table tr:hover td{background:rgba(200,165,90,0.04)}.skill-name{color:var(--text)}.skill-stat{color:var(--text3);font-size:12px}.skill-table input{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--fp);font-size:16px;text-align:center;width:44px;padding:3px;outline:none}.skill-table input:focus{border-color:var(--gold)}.skill-total{color:var(--gold2);font-weight:600}.skill-cat{font-family:var(--fc);font-size:10px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;padding:10px 10px 4px}.feat-card{background:var(--card);border:1px solid var(--border);padding:14px 16px;margin-bottom:10px;position:relative}.feat-header{display:flex;gap:10px;align-items:baseline;margin-bottom:6px}.feat-name{font-family:var(--fc);font-size:14px;color:var(--gold2);font-weight:600}.feat-tag{font-size:11px;color:var(--text3);background:var(--bg3);padding:1px 8px;border:1px solid var(--border)}.feat-body{font-size:16px;color:var(--text2);line-height:1.6;white-space:pre-line}.feat-edit-btn{position:absolute;top:10px;right:12px;background:transparent;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:3px 10px;cursor:pointer;font-family:var(--fc);letter-spacing:1px;transition:all 0.2s}.feat-edit-btn:hover{border-color:var(--gold);color:var(--gold)}.power-slot{background:var(--card);border:1px solid var(--border);padding:14px 16px;margin-bottom:10px}.power-slot-header{display:flex;gap:12px;align-items:center;margin-bottom:8px}.slot-num{font-family:var(--fc);font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;min-width:50px}.power-slot input.power-name{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--gold2);font-family:var(--fp);font-size:15px;font-weight:600;padding:5px 10px;outline:none}.power-slot input.power-name:focus{border-color:var(--gold)}.power-slot input.power-lv{width:50px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--fp);font-size:14px;padding:5px;text-align:center;outline:none}.power-slot input.power-lv:focus{border-color:var(--gold)}.power-slot textarea.power-desc{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-family:var(--fp);font-size:15px;padding:8px 10px;outline:none;resize:vertical;min-height:60px;line-height:1.6}.power-slot textarea.power-desc:focus{border-color:var(--gold)}.power-slot.empty{opacity:0.4}.inventory-add{background:var(--card2);border:1px solid var(--border2);padding:20px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-end}.inventory-add .field{flex:1;margin-bottom:0}.add-btn{background:var(--gold);color:var(--bg);border:none;font-family:var(--fc);font-size:11px;letter-spacing:2px;padding:8px 20px;cursor:pointer;text-transform:uppercase;transition:background 0.2s;white-space:nowrap;height:36px}.add-btn:hover{background:var(--gold2)}.inventory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}.inv-card{background:var(--card);border:1px solid var(--border);padding:12px 14px;position:relative;transition:border-color 0.2s}.inv-card:hover{border-color:var(--border2)}.inv-card-name{font-family:var(--fc);font-size:13px;color:var(--gold2);margin-bottom:4px;padding-right:24px}.inv-card-meta{display:flex;gap:8px;font-size:12px;color:var(--text3)}.inv-qty-field{max-width:80px}.inv-cat-tag{font-size:10px;color:var(--accent);background:rgba(212,136,42,0.1);padding:1px 7px;border:1px solid rgba(212,136,42,0.2)}.inv-remove{position:absolute;top:8px;right:8px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:14px;line-height:1;transition:color 0.2s}.inv-remove:hover{color:var(--red)}.inv-empty{text-align:center;color:var(--text3);font-style:italic;padding:40px;font-size:15px;border:1px dashed var(--border)}
+.inv-subtabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.inv-subtabs::-webkit-scrollbar{display:none}
+.inv-subtab{font-family:var(--fc);font-size:11px;letter-spacing:1px;color:var(--text3);padding:10px 16px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;text-transform:uppercase}
+.inv-subtab:hover{color:var(--text2)}
+.inv-subtab.active{color:var(--gold2);border-bottom-color:var(--gold2)}.equip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.equip-slot{background:var(--bg3);border:1px solid var(--border);padding:10px 12px}.equip-label{font-family:var(--fc);font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}.equip-slot input{background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);font-family:var(--fp);font-size:14px;width:100%;padding:4px 0;outline:none}.equip-slot input:focus{border-color:var(--gold)}.equip-select{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--fp);font-size:14px;width:100%;padding:6px 8px;outline:none;cursor:pointer}.equip-select:focus{border-color:var(--gold)}.attack-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.atk-row{background:var(--bg3);border:1px solid var(--border);padding:10px 12px;display:flex;justify-content:space-between;align-items:center}.atk-label{font-size:13px;color:var(--text2)}.atk-val{font-size:18px;color:var(--gold2);font-weight:600}@media (max-width:700px){html,body{overflow-x:hidden;width:100%}.header{padding:10px 14px;gap:10px}.header-title{font-size:17px;letter-spacing:2px}.header-sub{font-size:11px}.save-btn{font-size:10px;padding:6px 12px}.tabs{display:none}.bottom-nav{display:flex !important;position:fixed;bottom:0;left:0;right:0;background:#100d07;border-top:1px solid var(--border2);z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,0.6);flex-direction:column}.swipe-dots{display:flex;justify-content:center;gap:6px;padding:6px 0 2px}.swipe-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all 0.2s}.swipe-dot.active{background:var(--gold2);width:18px;border-radius:3px}.nav-items-row{display:flex}.bottom-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 4px 10px;cursor:pointer;gap:3px;min-height:52px;background:transparent;border:none;-webkit-tap-highlight-color:rgba(200,165,90,0.15);touch-action:manipulation}.bottom-nav-item .nav-icon{font-size:20px;line-height:1;pointer-events:none}.bottom-nav-item .nav-label{font-family:var(--fc);font-size:8px;letter-spacing:0.5px;color:var(--text3);text-transform:uppercase;text-align:center;line-height:1.2;pointer-events:none}.bottom-nav-item.active .nav-label{color:var(--gold2)}.bottom-nav-item.active .nav-icon{filter:drop-shadow(0 0 5px rgba(200,165,90,0.8))}.content{padding:14px 12px;padding-bottom:96px !important;position:relative;z-index:1}.grid-2,.grid-3,.grid-auto{grid-template-columns:1fr !important;gap:12px}.stat-block{grid-template-columns:repeat(3,1fr) !important;gap:8px}.stat-score input{width:52px;font-size:20px}.stat-mod{font-size:12px}.defense-grid{grid-template-columns:repeat(3,1fr) !important;gap:8px}.def-value{font-size:20px}.def-value input{font-size:20px;width:44px}.resource-row{flex-direction:column;gap:8px}.resource-box{padding:10px 12px}.resource-inputs input{width:60px;font-size:20px}.card{padding:12px}.field input,.field textarea,.field select{font-size:16px !important;padding:10px 10px;min-height:44px}.field label{font-size:10px}.equip-grid{grid-template-columns:1fr 1fr !important}.equip-slot input{font-size:14px;padding:6px 0;min-height:36px}.attack-grid{grid-template-columns:1fr 1fr !important}.atk-row{padding:8px 10px}.atk-label{font-size:12px}.atk-val{font-size:16px}.skill-table{font-size:14px}.skill-table th{font-size:9px;padding:6px 6px}.skill-table td{padding:7px 6px}.skill-table input{width:40px;font-size:14px;padding:4px 2px}.feat-card{padding:12px}.feat-name{font-size:14px}.feat-body{font-size:14px}.feat-edit-btn{position:static;margin-top:10px;width:100%;text-align:center}.power-slot{padding:10px 12px}.power-slot-header{flex-wrap:wrap;gap:6px}.power-slot input.power-name{font-size:14px;min-width:0}.power-slot input.power-lv{width:44px;font-size:14px}.power-slot textarea.power-desc{font-size:13px}.inventory-add{flex-direction:column;gap:8px;padding:14px}.inventory-add .field{margin-bottom:0;flex:unset;width:100%}.inventory-add .field input,.inventory-add .field select{width:100%}.inv-qty-field{max-width:100% !important}.add-btn{width:100%;height:44px;font-size:12px}.inventory-grid{grid-template-columns:1fr !important;gap:8px}.inv-card{padding:12px 14px}.inv-card-name{font-size:14px}.inv-subtab{font-size:10px;padding:8px 10px}.xu-box{padding:10px 14px}.xu-box input{font-size:20px;width:100px}.section-title{font-size:10px;letter-spacing:2px;margin-bottom:10px}::-webkit-scrollbar{display:none}}.bottom-nav{display:none}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}.xu-display{font-family:var(--fc);font-size:28px;color:var(--gold2);font-weight:700;letter-spacing:2px}.xu-box{background:var(--bg3);border:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:12px;margin-bottom:16px}.xu-box label{font-family:var(--fc);font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase}.xu-box input{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--gold2);font-family:var(--fc);font-size:24px;font-weight:700;width:120px;text-align:center;outline:none;padding:2px 4px}.xu-box input:focus{border-color:var(--gold)}.mb16{margin-bottom:16px}.mb24{margin-bottom:24px}</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <div class="header-title" id="char-name-display">AHA</div>
+    <div class="header-sub" id="char-sub-display">Musician · Level 1</div>
+  </div>
+  <button class="save-btn" id="save-btn" onclick="saveData()">✦ Save</button>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="showTab('basics')">Chỉ Số Cơ Bản</div>
+  <div class="tab" onclick="showTab('skills')">Skill Check</div>
+  <div class="tab" onclick="showTab('feats')">Skill Feat</div>
+  <div class="tab" onclick="showTab('powers')">Power</div>
+  <div class="tab" onclick="showTab('inventory')">Inventory</div>
+  <div class="tab" onclick="showTab('settings')">⚙ Settings</div>
+</div>
+<div class="content">
+<div class="panel active" id="panel-basics">
+  <div class="grid-2 mb24">
+    <div class="card">
+      <div class="section-title">Nhân Vật</div>
+      <div class="field"><label>Tên Nhân Vật</label><input id="name" value="Aha" oninput="updateHeader()"></div>
+      <div class="field"><label>Dị Năng / Class</label><input id="dinang" value="Musician" oninput="updateHeader()"></div>
+      <div class="grid-2">
+        <div class="field"><label>Level</label>
+          <select id="level" onchange="updateHeader();recalcAll()"></select>
+        </div>
+        <div class="field"><label>Tuổi</label><input id="age" type="number" value="19"></div>
+        <div class="field"><label>Chiều Cao (cm)</label><input id="height" type="number" value="175"></div>
+        <div class="field"><label>Cân Nặng (kg)</label><input id="weight" type="number" value="60"></div>
+        <div class="field"><label>Quốc Tịch</label><input id="nationality" value=""></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">Chỉ Số STAT</div>
+      <div class="stat-block">
+        <div class="stat-item">
+          <div class="stat-name">STR</div>
+          <div class="stat-score"><input type="number" id="stat-str" value="" oninput="recalcAll()" placeholder="—"></div>
+          <div class="stat-mod" id="mod-str">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-name">CON</div>
+          <div class="stat-score"><input type="number" id="stat-con" value="" oninput="recalcAll()" placeholder="—"></div>
+          <div class="stat-mod" id="mod-con">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-name">DEX</div>
+          <div class="stat-score"><input type="number" id="stat-dex" value="" oninput="recalcAll()" placeholder="—"></div>
+          <div class="stat-mod" id="mod-dex">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-name">INT</div>
+          <div class="stat-score"><input type="number" id="stat-int" value="" oninput="recalcAll()" placeholder="—"></div>
+          <div class="stat-mod" id="mod-int">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-name">WIS</div>
+          <div class="stat-score"><input type="number" id="stat-wis" value="" oninput="recalcAll()" placeholder="—"></div>
+          <div class="stat-mod" id="mod-wis">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-name">CHA</div>
+          <div class="stat-score"><input type="number" id="stat-cha" value="" oninput="recalcAll()" placeholder="—"></div>
+          <div class="stat-mod" id="mod-cha">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mb24">
+    <div class="section-title">Chỉ Số Phòng Thủ</div>
+    <div class="defense-grid">
+      <div class="def-box">
+        <div class="def-label">AC</div>
+        <div class="def-value"><span id="calc-ac">11</span></div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">AC Max</div>
+        <div class="def-value"><input type="number" id="ac-max" placeholder="—" oninput="recalcAll()"></div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">WILL</div>
+        <div class="def-value"><span id="calc-will">10</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="mb24">
+    <div class="section-title">HP / MP / WILL</div>
+    <div class="resource-row">
+      <div class="resource-box">
+        <div class="resource-label">HP</div>
+        <div class="resource-inputs">
+          <input type="number" id="hp-current" value="" placeholder="0" oninput="updateBar('hp')">
+          <span class="slash">/</span>
+          <input type="number" id="hp-max-override" placeholder="Max" style="width:64px;" oninput="updateBar('hp')" title="Override max HP (e.g. from items)">
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px;">Base: <span id="hp-base-display">—</span></div>
+        <div class="resource-bar"><div class="resource-bar-fill hp-fill" id="hp-bar" style="width:0%"></div></div>
+      </div>
+      <div class="resource-box">
+        <div class="resource-label">MP</div>
+        <div class="resource-inputs">
+          <input type="number" id="mp-current" value="" placeholder="0" oninput="updateBar('mp')">
+          <span class="slash">/</span>
+          <input type="number" id="mp-max-override" placeholder="Max" style="width:64px;" oninput="updateBar('mp')" title="Override max MP">
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px;">Base: <span id="mp-base-display">—</span></div>
+        <div class="resource-bar"><div class="resource-bar-fill mp-fill" id="mp-bar" style="width:0%"></div></div>
+      </div>
+      <div class="resource-box">
+        <div class="resource-label">WILL</div>
+        <div class="resource-inputs">
+          <input type="number" id="will-current" value="" placeholder="0" oninput="updateBar('will')">
+          <span class="slash">/</span>
+          <input type="number" id="will-max-override" placeholder="Max" style="width:64px;" oninput="updateBar('will')" title="Override max WILL">
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px;">Base: <span id="will-base-display">—</span></div>
+        <div class="resource-bar"><div class="resource-bar-fill will-fill" id="will-bar" style="width:0%"></div></div>
+      </div>
+      <div class="resource-box">
+        <div class="resource-label">Temp HP</div>
+        <div class="resource-inputs">
+          <input type="number" id="temp-hp" value="" placeholder="0">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mb24">
+    <div class="section-title">Điểm Đặc Biệt</div>
+    <div class="resource-row">
+      <div class="resource-box" style="border-color: rgba(180,120,220,0.4);">
+        <div class="resource-label" style="color:#b078dc;">IP — Inspiration Point</div>
+        <div class="resource-inputs">
+          <input type="number" id="ip-current" value="" placeholder="0" min="0">
+          <span class="slash">/</span>
+          <input type="number" id="ip-max" value="" placeholder="Max" min="0" style="width:60px;">
+        </div>
+        <div style="font-size:13px;color:var(--text3);margin-top:6px;font-style:italic">Dùng để kích hoạt các hiệu ứng đặc biệt</div>
+      </div>
+      <div class="resource-box" style="border-color: rgba(80,180,220,0.4);">
+        <div class="resource-label" style="color:#50b4dc;">PP — Power Point</div>
+        <div class="resource-inputs">
+          <input type="number" id="pp-current" value="" placeholder="0" min="0">
+          <span class="slash">/</span>
+          <input type="number" id="pp-max" value="" placeholder="Max" min="0" style="width:60px;">
+        </div>
+        <div style="font-size:13px;color:var(--text3);margin-top:6px;font-style:italic">Dùng để nâng cấp abilities với DM</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2 mb24">
+    <div class="card">
+      <div class="section-title">Trang Bị</div>
+      <div class="equip-grid">
+        <div class="equip-slot">
+          <div class="equip-label">Áo Giáp</div>
+          <select id="equip-armor" class="equip-select"><option value="">— trống —</option></select>
+        </div>
+        <div class="equip-slot">
+          <div class="equip-label">Phụ Kiện 1</div>
+          <select id="equip-acc1" class="equip-select"><option value="">— trống —</option></select>
+        </div>
+        <div class="equip-slot">
+          <div class="equip-label">Tay Trái</div>
+          <select id="equip-left" class="equip-select"><option value="">— trống —</option></select>
+        </div>
+        <div class="equip-slot">
+          <div class="equip-label">Tay Phải</div>
+          <select id="equip-right" class="equip-select"><option value="">— trống —</option></select>
+        </div>
+        <div class="equip-slot">
+          <div class="equip-label">Phụ Kiện 2</div>
+          <select id="equip-acc2" class="equip-select"><option value="">— trống —</option></select>
+        </div>
+        <div class="equip-slot">
+          <div class="equip-label">Phụ Kiện 3</div>
+          <select id="equip-acc3" class="equip-select"><option value="">— trống —</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">Chỉ Số Tấn Công</div>
+      <div class="field"><label>Stat Vũ Khí</label>
+        <select id="weapon-stat" onchange="recalcAll()">
+          <option value="DEX" selected>DEX</option>
+          <option value="STR">STR</option>
+          <option value="INT">INT</option>
+          <option value="WIS">WIS</option>
+          <option value="CHA">CHA</option>
+          <option value="CON">CON</option>
+        </select>
+      </div>
+      <div class="field"><label>Stat Phép</label>
+        <select id="spell-stat" onchange="recalcAll()">
+          <option value="INT" selected>INT</option>
+          <option value="WIS">WIS</option>
+          <option value="CHA">CHA</option>
+        </select>
+      </div>
+      <div class="field"><label>Độ Chính Xác Bonus</label><input type="number" id="acc-bonus" value="0" oninput="recalcAll()"></div>
+      <div class="attack-grid" style="margin-top:10px">
+        <div class="atk-row"><span class="atk-label">Cận Chiến</span><span class="atk-val" id="calc-melee">—</span></div>
+        <div class="atk-row"><span class="atk-label">Tầm Xa</span><span class="atk-val" id="calc-ranged">—</span></div>
+        <div class="atk-row"><span class="atk-label">Spell Hit</span><span class="atk-val" id="calc-spellhit">—</span></div>
+        <div class="atk-row"><span class="atk-label">Spell Save DC</span><span class="atk-val" id="calc-spellsave">—</span></div>
+      </div>
+      <div style="margin-top:16px">
+        <div class="section-title">Tổng Xu</div>
+        <div class="xu-box">
+          <label>Xu</label>
+          <input type="number" id="total-xu" value="0">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel" id="panel-skills">
+  <table class="skill-table" id="skill-table">
+    <thead>
+      <tr>
+        <th>Kĩ Năng</th>
+        <th>Chỉ Số</th>
+        <th>Train</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="skill-tbody"></tbody>
+  </table>
+</div>
+<div class="panel" id="panel-feats">
+  <div id="feats-list"></div>
+  <button class="add-btn" onclick="addFeat()" style="margin-top:10px">+ Add Feat</button>
+</div>
+<div class="panel" id="panel-powers">
+  <div style="margin-bottom:12px;font-size:13px;color:var(--text3)">
+    Power Slots: <span id="power-slots-display" style="color:var(--gold2);font-weight:600;">—</span>
+  </div>
+  <div id="powers-list"></div>
+</div>
+<div class="panel" id="panel-inventory">
+  <div class="inv-subtabs">
+    <div class="inv-subtab active" data-sub="all" onclick="switchInvTab('all')">Tất Cả</div>
+    <div class="inv-subtab" data-sub="combat" onclick="switchInvTab('combat')">⚔ Giáp & Vũ Khí</div>
+    <div class="inv-subtab" data-sub="consumable" onclick="switchInvTab('consumable')">🧪 Thuốc</div>
+    <div class="inv-subtab" data-sub="accessory" onclick="switchInvTab('accessory')">💍 Phụ Kiện</div>
+    <div class="inv-subtab" data-sub="misc" onclick="switchInvTab('misc')">📦 Misc</div>
+  </div>
+  <div class="inventory-add">
+    <div class="field"><label>Item Name</label><input type="text" id="inv-name" placeholder="e.g. Health Potion" onkeydown="if(event.key==='Enter')addItem()"></div>
+    <div class="field"><label>Category</label>
+      <select id="inv-cat">
+        <option value="Weapon">⚔ Weapon</option>
+        <option value="Armor">🛡 Armor</option>
+        <option value="Consumable">🧪 Thuốc / Consumable</option>
+        <option value="Accessory">💍 Accessory</option>
+        <option value="Misc">📦 Misc</option>
+      </select>
+    </div>
+    <div class="field inv-qty-field"><label>Qty</label><input type="number" id="inv-qty" value="1" min="1"></div>
+    <div class="field"><label>Notes</label><input type="text" id="inv-notes" placeholder="Optional description"></div>
+    <button class="add-btn" onclick="addItem()">+ Add</button>
+  </div>
+  <div id="inventory-grid" class="inventory-grid"></div>
+</div>
+
+<div class="panel" id="panel-settings">
+<div class="section-title">Nền & Màu Sắc</div>
+<div class="grid-2 mb24">
+  <div class="card">
+    <div class="section-title">Background</div>
+    <div class="field"><label>Màu nền</label><input type="color" id="st-bg" oninput="applyTheme()"></div>
+    <div class="field"><label>Màu nền thẻ</label><input type="color" id="st-card" oninput="applyTheme()"></div>
+    <div class="field"><label>Màu viền</label><input type="color" id="st-border" oninput="applyTheme()"></div>
+    <div class="field"><label>Ảnh nền (upload)</label>
+      <input type="file" id="st-bgimg" accept="image/*" onchange="loadBgImage(this)" style="font-size:13px;padding:6px;">
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+      <button class="stt-btn" onclick="setBgSize('cover')">Cover</button>
+      <button class="stt-btn" onclick="setBgSize('contain')">Contain</button>
+      <button class="stt-btn" onclick="setBgSize('repeat')">Tile</button>
+      <button class="stt-btn" id="btn-clearbg" onclick="clearBgImage()">✕ Clear Image</button>
+    </div>
+    <div class="field" style="margin-top:12px"><label>Độ mờ nền (0–1)</label>
+      <input type="range" id="st-bgopacity" min="0" max="1" step="0.05" value="1" oninput="applyTheme();document.getElementById('st-bgopacity-val').textContent=this.value">
+      <span id="st-bgopacity-val" style="font-size:13px;color:var(--text3)">1</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section-title">Màu Chữ & Nhấn</div>
+    <div class="field"><label>Chữ chính</label><input type="color" id="st-text" oninput="applyTheme()"></div>
+    <div class="field"><label>Chữ phụ</label><input type="color" id="st-text2" oninput="applyTheme()"></div>
+    <div class="field"><label>Màu vàng / Gold</label><input type="color" id="st-gold" oninput="applyTheme()"></div>
+    <div class="field"><label>Màu nhấn / Accent</label><input type="color" id="st-accent" oninput="applyTheme()"></div>
+    <div class="field"><label>HP bar</label><input type="color" id="st-red" oninput="applyTheme()"></div>
+    <div class="field"><label>MP bar</label><input type="color" id="st-blue" oninput="applyTheme()"></div>
+  </div>
+</div>
+<div class="section-title">Font Chữ</div>
+<div class="card mb24">
+  <div class="grid-2">
+    <div class="field"><label>Font tiêu đề (Cinzel style)</label>
+      <select id="st-fc" onchange="applyTheme()">
+        <option value="'Cinzel',serif">Cinzel (default)</option>
+        <option value="'MedievalSharp',serif">MedievalSharp</option>
+        <option value="'Uncial Antiqua',cursive">Uncial Antiqua</option>
+        <option value="'Pirata One',cursive">Pirata One</option>
+        <option value="'Almendra SC',serif">Almendra SC</option>
+        <option value="'IM Fell English SC',serif">IM Fell English SC</option>
+        <option value="Georgia,serif">Georgia</option>
+        <option value="'Times New Roman',serif">Times New Roman</option>
+      </select>
+    </div>
+    <div class="field"><label>Font nội dung (Crimson style)</label>
+      <select id="st-fp" onchange="applyTheme()">
+        <option value="'Crimson Pro',serif">Crimson Pro (default)</option>
+        <option value="'Crimson Text',serif">Crimson Text</option>
+        <option value="'EB Garamond',serif">EB Garamond</option>
+        <option value="'Lora',serif">Lora</option>
+        <option value="'Merriweather',serif">Merriweather</option>
+        <option value="'Palatino Linotype',serif">Palatino</option>
+        <option value="Georgia,serif">Georgia</option>
+        <option value="Arial,sans-serif">Arial</option>
+      </select>
+    </div>
+  </div>
+  <div style="margin-top:12px;padding:12px;background:var(--bg3);border:1px solid var(--border);">
+    <div style="font-family:var(--fc);font-size:16px;color:var(--gold2);margin-bottom:6px;">Tiêu đề mẫu — AHA</div>
+    <div style="font-family:var(--fp);font-size:15px;color:var(--text);">Nội dung mẫu: Aha lộn nhào và tung ra 2 cú đá gây 1d8 damage.</div>
+  </div>
+</div>
+<div class="section-title">Preset Themes</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
+  <button class="theme-preset" onclick="applyPreset('dark')" style="--pc:#0d0a07;--pg:#c8a55a">⚔ Dark Gold</button>
+  <button class="theme-preset" onclick="applyPreset('midnight')" style="--pc:#050a14;--pg:#6090d0">🌙 Midnight Blue</button>
+  <button class="theme-preset" onclick="applyPreset('forest')" style="--pc:#060e06;--pg:#60a060">🌿 Forest</button>
+  <button class="theme-preset" onclick="applyPreset('crimson')" style="--pc:#120407;--pg:#d06060">🩸 Blood Moon</button>
+  <button class="theme-preset" onclick="applyPreset('parchment')" style="--pc:#f5edd8;--pg:#8b4513">📜 Parchment</button>
+  <button class="theme-preset" onclick="applyPreset('void')" style="--pc:#000000;--pg:#cc66ff">✦ Void Purple</button>
+</div>
+<div style="display:flex;gap:10px;">
+  <button class="add-btn" onclick="saveTheme()">✦ Save Theme</button>
+  <button class="stt-btn" style="padding:8px 18px;" onclick="resetTheme()">↺ Reset to Default</button>
+</div>
+</div>
+</div><!-- end .content -->
+<link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Pirata+One&family=Almendra+SC&family=IM+Fell+English+SC&family=Crimson+Text&family=EB+Garamond&family=Lora&family=Merriweather&display=swap" rel="stylesheet">
+<style>
+.stt-btn{background:transparent;border:1px solid var(--border2);color:var(--text2);font-family:var(--fc);font-size:11px;letter-spacing:1px;padding:6px 14px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.stt-btn:hover{border-color:var(--gold);color:var(--gold)}
+.theme-preset{background:var(--pc,#1a1208);border:2px solid var(--pg,#c8a55a);color:var(--pg,#c8a55a);font-family:var(--fc);font-size:11px;letter-spacing:1px;padding:8px 14px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.theme-preset:hover{opacity:.8}
+#st-bgimg{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:100%;padding:6px;}
+input[type=color]{width:100%;height:40px;padding:2px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;}
+input[type=range]{width:100%;accent-color:var(--gold);}
+#panel-settings{padding-bottom:20px}
+</style>
+<script>
+const SKILLS = [
+{ cat: 'Kĩ Năng Thể Chất', name: 'Athletics', stat: 'STR' },
+{ cat: null, name: 'Acrobatic', stat: 'DEX', train: 5 },
+{ cat: null, name: 'Handwork', stat: 'DEX' },
+{ cat: null, name: 'Survival', stat: 'CON' },
+{ cat: null, name: 'Crafting', stat: 'DEX' },
+{ cat: null, name: 'Pilot', stat: 'DEX' },
+{ cat: null, name: 'Vũ Khí Cận Chiến', stat: '—', train: 5 },
+{ cat: null, name: 'Vũ Khí Tầm Xa', stat: '—' },
+{ cat: 'Kĩ Năng Trí Tuệ', name: 'Science', stat: 'INT' },
+{ cat: null, name: 'Arcana', stat: 'INT' },
+{ cat: null, name: 'Academics', stat: 'WIS' },
+{ cat: null, name: 'Nature', stat: 'WIS' },
+{ cat: null, name: 'Tech', stat: 'INT' },
+{ cat: null, name: 'Medicine', stat: 'WIS' },
+{ cat: null, name: 'Politic', stat: 'WIS' },
+{ cat: null, name: 'Strategy', stat: 'INT' },
+{ cat: null, name: 'Perception', stat: 'WIS' },
+{ cat: null, name: 'Stealth', stat: 'DEX' },
+{ cat: 'Kĩ Năng Xã Giao', name: 'Insight', stat: 'WIS' },
+{ cat: null, name: 'Dominion', stat: 'CHA' },
+{ cat: null, name: 'Persuasion', stat: 'CHA' },
+{ cat: null, name: 'Deception', stat: 'CHA' },
+{ cat: null, name: 'Social', stat: 'CHA' },
+{ cat: 'Kĩ Năng Ngoài Hệ Thống', name: 'Performance', stat: 'CHA', train: 5, custom: true },
+{ cat: null, name: '', stat: '', custom: true },
+{ cat: null, name: '', stat: '', custom: true },
+{ cat: null, name: '', stat: '', custom: true },
+{ cat: null, name: '', stat: '', custom: true },
+];
+const POWERS_DEFAULT = [
+{ slot: 1, name: 'Rising Voice', lv: '1', desc: 'Mana: 2 - Standard\n\nAha lộn nhào và tung ra 2 cú đá. Mỗi cú đá gây 1d8 physical/force damage.\n\nCú đá thứ 2 trúng mục tiêu sẽ làm mục tiêu prone.' },
+{ slot: 2, name: 'Drop the Beat', lv: '1', desc: 'Mana: 4 - Standard\n\nAha phóng đi 6m, lao tới, và tấn công bằng gót chân.\n\nNếu trúng, mục tiêu sẽ nhận 3d6 physical/force damage và bị prone.' },
+{ slot: 3, name: 'Counter Melody', lv: '1', desc: 'Mana: 3 - Reaction - Range: 3m\n\nKhi một mục tiêu tiến vào tầm 3m của Aha, cô có thể lập tức phóng đến để tấn công, gây 1d8 + STR force damage và đẩy lùi mục tiêu 2m.' },
+{ slot: 4, name: 'Final Riff', lv: '1', desc: 'Mana: 6 và toàn bộ Nhịp đang có - Standard - Range: 12m\n\nAha lấy đà, sử dụng toàn bộ Nhịp đang có rồi phóng đi về phía mục tiêu, tung ra một cú song phi cước, trúng gây 4d10 physical/force damage + 1d10 sonic damage trên mỗi stack Nhịp được sử dụng.' },
+{ slot: 5, name: '', lv: '', desc: '' },
+{ slot: 6, name: '', lv: '', desc: '' },
+{ slot: 7, name: '', lv: '', desc: '' },
+{ slot: 8, name: '', lv: '', desc: '' },
+{ slot: 9, name: '', lv: '', desc: '' },
+{ slot: 10, name: '', lv: '', desc: '' },
+{ slot: 11, name: '', lv: '', desc: '' },
+{ slot: 12, name: '', lv: '', desc: '' },
+];
+const FEATS_DEFAULT = [
+{ skill: 'Acrobatic (DEX)', name: "Melodies 'round Us", desc: "Mỗi lần Aha gây sát thương lên mục tiêu hoặc bản thân cô, cô có thể dùng Minor và 2 mana để lập tức phóng đi 5m.\n\nMỗi lượt 1 lần." },
+{ skill: 'Vũ Khí Cận Chiến', name: "1, 2, 3 Annnnd 4!", desc: "Mỗi lần Aha tấn công, cô sẽ nhận 1 Nhịp. Cô có thể có tối đa 3 Nhịp.\n\nKích Nhịp bằng Minor sẽ sử dụng toàn bộ Nhịp đang có. Mỗi Nhịp cho đòn đánh unarmed của Aha +1d10 sonic damage." },
+{ skill: 'Performance (CHA)', name: "Blink & You'll Miss Me~", desc: "Khi di chuyển, Aha không bị OA." },
+];
+function save(key, val) { try { localStorage.setItem('aha_' + key, JSON.stringify(val)); } catch(e){} }
+function load(key, def) { try { const v = localStorage.getItem('aha_' + key); return v !== null ? JSON.parse(v) : def; } catch(e){ return def; } }
+function showTab(id) {
+const tabNames = ['basics','skills','feats','powers','inventory','settings'];
+document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', tabNames[i]===id));
+document.querySelectorAll('.bottom-nav-item').forEach(t => t.classList.toggle('active', t.dataset.tab===id));
+document.querySelectorAll('.swipe-dot').forEach(d => d.classList.toggle('active', d.dataset.dot===id));
+document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+document.getElementById('panel-'+id).classList.add('active');
+window.scrollTo(0, 0);
+}
+function getMod(score) {
+if (score === '' || score === null || isNaN(score)) return null;
+return Math.floor((parseInt(score) - 10) / 2);
+}
+function fmt(n) { if (n === null || n === undefined) return '—'; return (n >= 0 ? '+' : '') + n; }
+function getStatMod(stat) {
+const map = { STR:'str', CON:'con', DEX:'dex', INT:'int', WIS:'wis', CHA:'cha' };
+const id = map[stat];
+if (!id) return null;
+const val = document.getElementById('stat-'+id).value;
+return getMod(val);
+}
+function recalcAll() {
+const stats = ['str','con','dex','int','wis','cha'];
+const mods = {};
+stats.forEach(s => {
+const val = document.getElementById('stat-'+s).value;
+const m = getMod(val);
+mods[s] = m;
+const el = document.getElementById('mod-'+s);
+el.textContent = m === null ? '—' : fmt(m);
+el.style.color = m === null ? 'var(--text3)' : m >= 0 ? 'var(--gold2)' : 'var(--red)';
+});
+const level = parseInt(document.getElementById('level').value) || 1;
+const profBonus = Math.ceil(level / 4);
+const con = mods.con, wis_m = mods.wis;
+const acBase = 10 + (con !== null && wis_m !== null ? Math.max(con, wis_m) : (con ?? wis_m ?? 0)) + 2 * profBonus;
+document.getElementById('calc-ac').textContent = acBase;
+const str_m = mods.str;
+const willBase = 10 + (str_m !== null && con !== null ? Math.max(str_m, con) : (str_m ?? con ?? 0));
+document.getElementById('calc-will').textContent = willBase;
+const hpBase = 10 + ((mods.con ?? 0) * level);
+document.getElementById('hp-base-display').textContent = hpBase;
+if (!document.getElementById('hp-max-override').value) {
+document.getElementById('hp-max-override').placeholder = String(hpBase);
+}
+const mpBase = 10 + ((mods.int ?? 0) * level);
+document.getElementById('mp-base-display').textContent = mpBase;
+if (!document.getElementById('mp-max-override').value) {
+document.getElementById('mp-max-override').placeholder = String(mpBase);
+}
+const willBase2 = willBase;
+document.getElementById('will-base-display').textContent = willBase2;
+if (!document.getElementById('will-max-override').value) {
+document.getElementById('will-max-override').placeholder = String(willBase2);
+}
+updateBar('hp', hpBase);
+updateBar('mp', mpBase);
+updateBar('will', willBase2);
+const weapStat = document.getElementById('weapon-stat').value.toLowerCase();
+const spellStat = document.getElementById('spell-stat').value.toLowerCase();
+const accBonus = parseInt(document.getElementById('acc-bonus').value) || 0;
+const skillMelee = load('skill_train_Vũ Khí Cận Chiến', 0) || 0;
+const skillRanged = load('skill_train_Vũ Khí Tầm Xa', 0) || 0;
+const melee = (mods[weapStat] ?? 0) + profBonus + accBonus + (skillMelee >= 5 ? skillMelee : 0);
+const ranged = (mods[weapStat] ?? 0) + profBonus + accBonus + (skillRanged >= 5 ? skillRanged : 0);
+const spellHit = (mods[spellStat] ?? 0) + profBonus + accBonus;
+const spellSave = 10 + (mods[spellStat] ?? 0) + profBonus;
+document.getElementById('calc-melee').textContent = fmt(melee);
+document.getElementById('calc-ranged').textContent = fmt(ranged);
+document.getElementById('calc-spellhit').textContent = fmt(spellHit);
+document.getElementById('calc-spellsave').textContent = spellSave;
+const slots = 2 + level;
+document.getElementById('power-slots-display').textContent = slots;
+updateSkillTotals();
+}
+function updateBar(type, baseOverride) {
+const cur = parseInt(document.getElementById(type+'-current')?.value) || 0;
+const overrideEl = document.getElementById(type+'-max-override');
+const max = (overrideEl && overrideEl.value) ? parseInt(overrideEl.value) : (baseOverride || parseInt(overrideEl?.placeholder) || 1);
+const pct = Math.min(100, Math.max(0, (cur / max) * 100));
+const bar = document.getElementById(type+'-bar');
+if (bar) bar.style.width = pct + '%';
+}
+function updateHeader() {
+const name = document.getElementById('name').value || 'Aha';
+const level = document.getElementById('level').value || '1';
+const dinang = document.getElementById('dinang').value || '—';
+document.getElementById('char-name-display').textContent = name.toUpperCase();
+document.getElementById('char-sub-display').textContent = dinang + ' · Level ' + level;
+}
+function buildSkillTable() {
+const tbody = document.getElementById('skill-tbody');
+tbody.innerHTML = '';
+SKILLS.forEach((sk, i) => {
+if (sk.cat) {
+const catRow = document.createElement('tr');
+catRow.innerHTML = `<td colspan="4" class="skill-cat">${sk.cat}</td>`;
+tbody.appendChild(catRow);
+}
+const train = load('skill_train_'+i, sk.train || 0);
+const savedName = load('skill_name_'+i, sk.name);
+const savedStat = load('skill_stat_'+i, sk.stat);
+const row = document.createElement('tr');
+if (sk.custom) {
+row.innerHTML = `
+<td>
+<input type="text" value="${savedName}" placeholder="Tên kĩ năng..."
+id="sk-name-${i}"
+style="background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);font-family:'Crimson Pro',serif;font-size:15px;width:100%;outline:none;padding:2px 0;"
+oninput="onSkillName(${i}, this.value)">
+</td>
+<td>
+<select id="sk-stat-sel-${i}"
+style="background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-family:'Crimson Pro',serif;font-size:13px;padding:2px 4px;outline:none;width:100%;"
+onchange="onSkillStat(${i}, this.value)">
+<option value="" ${savedStat===''?'selected':''}>— none —</option>
+<option value="STR" ${savedStat==='STR'?'selected':''}>STR</option>
+<option value="CON" ${savedStat==='CON'?'selected':''}>CON</option>
+<option value="DEX" ${savedStat==='DEX'?'selected':''}>DEX</option>
+<option value="INT" ${savedStat==='INT'?'selected':''}>INT</option>
+<option value="WIS" ${savedStat==='WIS'?'selected':''}>WIS</option>
+<option value="CHA" ${savedStat==='CHA'?'selected':''}>CHA</option>
+</select>
+</td>
+<td><input type="number" value="${train||''}" id="sk-train-${i}" placeholder="0" oninput="onSkillTrain(${i}, this.value)"></td>
+<td class="skill-total" id="sk-total-${i}">—</td>
+`;
+} else {
+row.innerHTML = `
+<td><span class="skill-name">${sk.name}</span> <span class="skill-stat">${sk.stat}</span></td>
+<td><span class="skill-stat" id="sk-mod-${i}">—</span></td>
+<td><input type="number" value="${train||''}" id="sk-train-${i}" placeholder="0" oninput="onSkillTrain(${i}, this.value)"></td>
+<td class="skill-total" id="sk-total-${i}">—</td>
+`;
+}
+tbody.appendChild(row);
+});
+}
+function onSkillName(i, val) {
+SKILLS[i].name = val;
+save('skill_name_'+i, val);
+}
+function onSkillStat(i, val) {
+SKILLS[i].stat = val;
+save('skill_stat_'+i, val);
+updateSkillTotals();
+}
+function onSkillTrain(i, val) {
+save('skill_train_'+i, parseInt(val)||0);
+updateSkillTotals();
+recalcAll();
+}
+function updateSkillTotals() {
+const level = parseInt(document.getElementById('level').value) || 1;
+const profBonus = Math.ceil(level / 4);
+SKILLS.forEach((sk, i) => {
+const statToUse = sk.custom ? (load('skill_stat_'+i, sk.stat) || '') : sk.stat;
+const mod = (statToUse && statToUse !== '—') ? (getStatMod(statToUse) ?? 0) : null;
+const train = parseInt(document.getElementById('sk-train-'+i)?.value) || 0;
+const modEl = document.getElementById('sk-mod-'+i);
+const totalEl = document.getElementById('sk-total-'+i);
+if (modEl) modEl.textContent = (mod !== null) ? fmt(mod) : '—';
+if (totalEl) {
+if (!statToUse || statToUse === '—') {
+totalEl.textContent = fmt(profBonus + train);
+} else {
+totalEl.textContent = fmt((mod ?? 0) + profBonus + train);
+}
+}
+});
+}
+let feats = load('feats', FEATS_DEFAULT);
+function renderFeats() {
+const el = document.getElementById('feats-list');
+el.innerHTML = '';
+feats.forEach((f, i) => {
+const div = document.createElement('div');
+div.className = 'feat-card';
+div.innerHTML = `
+<div class="feat-header">
+<span class="feat-name" contenteditable="true" onblur="feats[${i}].name=this.textContent;saveFeats()">${f.name}</span>
+<span class="feat-tag" contenteditable="true" onblur="feats[${i}].skill=this.textContent;saveFeats()">${f.skill}</span>
+</div>
+<div class="feat-body" contenteditable="true" onblur="feats[${i}].desc=this.textContent;saveFeats()" style="outline:none;padding:4px;border:1px solid transparent;" onfocus="this.style.borderColor='var(--border2)'" onblur_extra="this.style.borderColor='transparent'">${f.desc}</div>
+<button class="feat-edit-btn" onclick="removeFeat(${i})">✕ Remove</button>
+`;
+el.appendChild(div);
+});
+}
+function addFeat() {
+feats.push({ skill: 'Skill (STAT)', name: 'New Feat', desc: 'Describe the feat here...' });
+saveFeats(); renderFeats();
+}
+function removeFeat(i) { feats.splice(i,1); saveFeats(); renderFeats(); }
+function saveFeats() { save('feats', feats); }
+let powers = load('powers', POWERS_DEFAULT);
+function renderPowers() {
+const el = document.getElementById('powers-list');
+el.innerHTML = '';
+powers.forEach((p, i) => {
+const isEmpty = !p.name && !p.desc;
+const div = document.createElement('div');
+div.className = 'power-slot' + (isEmpty ? ' empty' : '');
+div.innerHTML = `
+<div class="power-slot-header">
+<span class="slot-num">Slot ${p.slot}</span>
+<input class="power-name" type="text" value="${p.name}" placeholder="Power name..." oninput="powers[${i}].name=this.value;savePowers();updateSlotEmpty(${i})">
+<input class="power-lv" type="text" value="${p.lv}" placeholder="Lv" oninput="powers[${i}].lv=this.value;savePowers()">
+</div>
+<textarea class="power-desc" placeholder="Describe the power..." oninput="powers[${i}].desc=this.value;savePowers();updateSlotEmpty(${i})">${p.desc}</textarea>
+`;
+el.appendChild(div);
+});
+}
+function updateSlotEmpty(i) {
+const slots = document.querySelectorAll('.power-slot');
+if (slots[i]) slots[i].classList.toggle('empty', !powers[i].name && !powers[i].desc);
+}
+function savePowers() { save('powers', powers); }
+let inventory = load('inventory', []);
+let currentInvTab = 'all';
+function switchInvTab(sub) {
+currentInvTab = sub;
+document.querySelectorAll('.inv-subtab').forEach(t => t.classList.toggle('active', t.dataset.sub === sub));
+renderInventory();
+}
+function addItem() {
+const name = document.getElementById('inv-name').value.trim();
+if (!name) { document.getElementById('inv-name').focus(); return; }
+inventory.push({
+id: Date.now(),
+name,
+cat: document.getElementById('inv-cat').value,
+qty: parseInt(document.getElementById('inv-qty').value) || 1,
+notes: document.getElementById('inv-notes').value.trim()
+});
+save('inventory', inventory);
+document.getElementById('inv-name').value = '';
+document.getElementById('inv-qty').value = '1';
+document.getElementById('inv-notes').value = '';
+renderInventory();
+document.getElementById('inv-name').focus();
+}
+function removeItem(id) {
+inventory = inventory.filter(i => i.id !== id);
+save('inventory', inventory);
+renderInventory();
+}
+const INV_TAB_MAP = {
+combat: ['Weapon','Armor'],
+consumable: ['Consumable'],
+accessory: ['Accessory'],
+misc: ['Misc']
+};
+function renderInventory() {
+const el = document.getElementById('inventory-grid');
+const filtered = currentInvTab === 'all' ? inventory : inventory.filter(i => (INV_TAB_MAP[currentInvTab]||[]).includes(i.cat));
+if (!filtered.length) {
+el.innerHTML = `<div class="inv-empty">${currentInvTab === 'all' ? 'Inventory is empty. Add your first item above! ✦' : 'Không có item nào trong mục này.'}</div>`;
+refreshEquipDropdowns();
+return;
+}
+el.innerHTML = '';
+filtered.forEach(item => {
+const div = document.createElement('div');
+div.className = 'inv-card';
+div.innerHTML = `
+<div class="inv-card-name">${item.name}</div>
+<div class="inv-card-meta">
+<span class="inv-cat-tag">${item.cat}</span>
+</div>
+${item.qty > 1 ? `<div class="inv-card-qty">Qty: ${item.qty}</div>` : ''}
+${item.notes ? `<div style="font-size:12px;color:var(--text3);margin-top:4px;font-style:italic">${item.notes}</div>` : ''}
+<button class="inv-remove" onclick="removeItem(${item.id})">✕</button>
+`;
+el.appendChild(div);
+});
+refreshEquipDropdowns();
+}
+function refreshEquipDropdowns() {
+const slots = ['equip-armor','equip-acc1','equip-left','equip-right','equip-acc2','equip-acc3'];
+slots.forEach(id => {
+const sel = document.getElementById(id);
+if (!sel) return;
+const current = sel.value;
+sel.innerHTML = '<option value="">— trống —</option>';
+inventory.forEach(item => {
+const opt = document.createElement('option');
+opt.value = item.name;
+opt.textContent = item.name + (item.notes ? ' — ' + item.notes : '');
+sel.appendChild(opt);
+});
+const customOpt = document.createElement('option');
+customOpt.value = '__custom__';
+customOpt.textContent = '✏️ Nhập tên khác...';
+sel.appendChild(customOpt);
+sel.value = current || '';
+});
+}
+const FIELDS = ['name','dinang','level','age','height','weight','nationality',
+'stat-str','stat-con','stat-dex','stat-int','stat-wis','stat-cha',
+'ac-max','hp-current','hp-max-override','mp-current','mp-max-override',
+'will-current','will-max-override','temp-hp',
+'ip-current','ip-max','pp-current','pp-max',
+'equip-armor','equip-acc1','equip-left','equip-right','equip-acc2','equip-acc3',
+'weapon-stat','spell-stat','acc-bonus','total-xu'];
+function saveData() {
+FIELDS.forEach(id => {
+const el = document.getElementById(id);
+if (el) save('field_'+id, el.value);
+});
+const btn = document.getElementById('save-btn');
+btn.textContent = '✓ Saved';
+btn.classList.add('saved');
+setTimeout(() => { btn.textContent = '✦ Save'; btn.classList.remove('saved'); }, 1500);
+}
+function loadAllFields() {
+FIELDS.forEach(id => {
+const val = load('field_'+id, null);
+const el = document.getElementById(id);
+if (el && val !== null) el.value = val;
+});
+SKILLS.forEach((sk, i) => {
+if (sk.custom) {
+const savedName = load('skill_name_'+i, sk.name);
+const savedStat = load('skill_stat_'+i, sk.stat);
+SKILLS[i].name = savedName;
+SKILLS[i].stat = savedStat;
+}
+});
+feats = load('feats', FEATS_DEFAULT);
+powers = load('powers', POWERS_DEFAULT);
+inventory = load('inventory', []);
+}
+
+// ==================== THEME ====================
+const DEFAULTS = {
+'st-bg':'#0d0a07','st-card':'#1e1710','st-border':'#3a2e1e',
+'st-text':'#e8dcc8','st-text2':'#b8a888','st-gold':'#c8a55a',
+'st-accent':'#d4882a','st-red':'#c04040','st-blue':'#5080c0',
+'st-bgopacity':'1',
+'st-fc':"'Cinzel',serif",'st-fp':"'Crimson Pro',serif"
+};
+const PRESETS = {
+dark:   {bg:'#0d0a07',card:'#1e1710',border:'#3a2e1e',text:'#e8dcc8',text2:'#b8a888',gold:'#c8a55a',accent:'#d4882a',red:'#c04040',blue:'#5080c0'},
+midnight:{bg:'#050a14',card:'#0a1020',border:'#1a2840',text:'#c8d8f0',text2:'#8898b8',gold:'#6090d0',accent:'#4070c0',red:'#c04060',blue:'#4080d0'},
+forest: {bg:'#060e06',card:'#0e1a0e',border:'#1e3a1e',text:'#c8e0c0',text2:'#88a880',gold:'#60a060',accent:'#508050',red:'#c06040',blue:'#408060'},
+crimson:{bg:'#120407',card:'#200a0e',border:'#3a1018',text:'#f0c8c8',text2:'#c09090',gold:'#d06060',accent:'#b04040',red:'#e03030',blue:'#804060'},
+parchment:{bg:'#f5edd8',card:'#ede0c0',border:'#c8a878',text:'#2a1a08',text2:'#604820',gold:'#8b4513',accent:'#a0520d',red:'#800000',blue:'#00008b'},
+void:   {bg:'#000000',card:'#0d0014',border:'#2a0040',text:'#e8d0ff',text2:'#a880cc',gold:'#cc66ff',accent:'#9933cc',red:'#cc3366',blue:'#6633cc'}
+};
+
+function applyTheme() {
+const r = document.documentElement.style;
+const g = id => document.getElementById(id)?.value;
+r.setProperty('--bg', g('st-bg')||DEFAULTS['st-bg']);
+r.setProperty('--bg2', adjustColor(g('st-bg')||DEFAULTS['st-bg'], 8));
+r.setProperty('--bg3', adjustColor(g('st-bg')||DEFAULTS['st-bg'], 15));
+r.setProperty('--card', g('st-card')||DEFAULTS['st-card']);
+r.setProperty('--card2', adjustColor(g('st-card')||DEFAULTS['st-card'], 8));
+r.setProperty('--border', g('st-border')||DEFAULTS['st-border']);
+r.setProperty('--border2', adjustColor(g('st-border')||DEFAULTS['st-border'], 20));
+r.setProperty('--text', g('st-text')||DEFAULTS['st-text']);
+r.setProperty('--text2', adjustColor(g('st-text')||DEFAULTS['st-text'], -30));
+r.setProperty('--text3', adjustColor(g('st-text')||DEFAULTS['st-text'], -70));
+r.setProperty('--gold', g('st-gold')||DEFAULTS['st-gold']);
+r.setProperty('--gold2', adjustColor(g('st-gold')||DEFAULTS['st-gold'], 20));
+r.setProperty('--gold3', adjustColor(g('st-gold')||DEFAULTS['st-gold'], 40));
+r.setProperty('--accent', g('st-accent')||DEFAULTS['st-accent']);
+r.setProperty('--red', g('st-red')||DEFAULTS['st-red']);
+r.setProperty('--blue', g('st-blue')||DEFAULTS['st-blue']);
+r.setProperty('--fc', g('st-fc')||DEFAULTS['st-fc']);
+r.setProperty('--fp', g('st-fp')||DEFAULTS['st-fp']);
+const img = load('theme_bgimg', null);
+const opacity = parseFloat(g('st-bgopacity') ?? 1);
+const size = load('theme_bgsize', 'cover');
+if (img) {
+document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,${1-opacity}),rgba(0,0,0,${1-opacity})),url(${img})`;
+document.body.style.backgroundSize = size === 'repeat' ? 'auto' : size;
+document.body.style.backgroundRepeat = size === 'repeat' ? 'repeat' : 'no-repeat';
+document.body.style.backgroundPosition = 'center';
+document.body.style.backgroundAttachment = 'fixed';
+} else {
+document.body.style.backgroundImage = '';
+document.body.style.backgroundSize = '';
+}
+}
+
+function adjustColor(hex, amt) {
+if (!hex || !hex.startsWith('#')) return hex;
+let r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+r=Math.max(0,Math.min(255,r+amt)); g=Math.max(0,Math.min(255,g+amt)); b=Math.max(0,Math.min(255,b+amt));
+return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+
+function loadBgImage(input) {
+const file = input.files[0];
+if (!file) return;
+const reader = new FileReader();
+reader.onload = e => {
+save('theme_bgimg', e.target.result);
+applyTheme();
+};
+reader.readAsDataURL(file);
+}
+
+function clearBgImage() {
+try { localStorage.removeItem('aha_theme_bgimg'); } catch(e){}
+applyTheme();
+}
+
+function setBgSize(s) {
+save('theme_bgsize', s);
+applyTheme();
+}
+
+function applyPreset(name) {
+const p = PRESETS[name]; if (!p) return;
+const map = {bg:'st-bg',card:'st-card',border:'st-border',text:'st-text',text2:'st-text2',gold:'st-gold',accent:'st-accent',red:'st-red',blue:'st-blue'};
+Object.entries(map).forEach(([k,id]) => { const el=document.getElementById(id); if(el&&p[k]) el.value=p[k]; });
+applyTheme();
+}
+
+function saveTheme() {
+Object.keys(DEFAULTS).forEach(id => {
+const el = document.getElementById(id);
+if (el) save('theme_'+id, el.value);
+});
+save('theme_bgsize', load('theme_bgsize','cover'));
+const btn = document.getElementById('save-btn');
+btn.textContent = '✓ Theme Saved'; btn.classList.add('saved');
+setTimeout(()=>{btn.textContent='✦ Save';btn.classList.remove('saved');},1500);
+}
+
+function resetTheme() {
+Object.keys(DEFAULTS).forEach(id => {
+const el = document.getElementById(id);
+if (el) el.value = DEFAULTS[id];
+try { localStorage.removeItem('aha_theme_'+id); } catch(e){}
+});
+try { localStorage.removeItem('aha_theme_bgimg'); localStorage.removeItem('aha_theme_bgsize'); } catch(e){}
+applyTheme();
+}
+
+function loadTheme() {
+Object.keys(DEFAULTS).forEach(id => {
+const val = load('theme_'+id, DEFAULTS[id]);
+const el = document.getElementById(id);
+if (el) el.value = val;
+});
+applyTheme();
+}
+
+window.addEventListener('load', () => {
+const lvSel = document.getElementById('level');
+for(let i=1;i<=20;i++){const o=document.createElement('option');o.value=i;o.textContent=i;lvSel.appendChild(o);}
+loadAllFields();
+loadTheme();
+buildSkillTable();
+renderFeats();
+renderPowers();
+renderInventory();
+recalcAll();
+updateHeader();
+document.querySelectorAll('input, textarea, select').forEach(el => {
+el.addEventListener('change', saveData);
+});
+});
+document.addEventListener('keydown', e => { if ((e.ctrlKey||e.metaKey) && e.key==='s') { e.preventDefault(); saveData(); } });</script>
+
+<!-- Mobile bottom navigation — placed last so it's always on top -->
+<div class="bottom-nav" id="bottom-nav">
+  <div class="swipe-dots">
+    <div class="swipe-dot active" data-dot="basics"></div>
+    <div class="swipe-dot" data-dot="skills"></div>
+    <div class="swipe-dot" data-dot="feats"></div>
+    <div class="swipe-dot" data-dot="powers"></div>
+    <div class="swipe-dot" data-dot="inventory"></div>
+    <div class="swipe-dot" data-dot="settings"></div>
+  </div>
+  <div class="nav-items-row">
+    <button class="bottom-nav-item active" data-tab="basics"><span class="nav-icon">⚔️</span><span class="nav-label">Cơ Bản</span></button>
+    <button class="bottom-nav-item" data-tab="skills"><span class="nav-icon">🎯</span><span class="nav-label">Skills</span></button>
+    <button class="bottom-nav-item" data-tab="feats"><span class="nav-icon">✨</span><span class="nav-label">Feats</span></button>
+    <button class="bottom-nav-item" data-tab="powers"><span class="nav-icon">🔥</span><span class="nav-label">Powers</span></button>
+    <button class="bottom-nav-item" data-tab="inventory"><span class="nav-icon">🎒</span><span class="nav-label">Items</span></button>
+    <button class="bottom-nav-item" data-tab="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+  </div>
+</div>
+<script>const TABS = ['basics','skills','feats','powers','inventory','settings'];
+(function() {
+const content = document.querySelector('.content');
+let startX = 0, startY = 0, startTime = 0;
+content.addEventListener('touchstart', function(e) {
+startX = e.touches[0].clientX;
+startY = e.touches[0].clientY;
+startTime = Date.now();
+}, { passive: true });
+content.addEventListener('touchend', function(e) {
+const dx = e.changedTouches[0].clientX - startX;
+const dy = e.changedTouches[0].clientY - startY;
+const dt = Date.now() - startTime;
+if (dt > 400) return;
+if (Math.abs(dx) < 50) return;
+if (Math.abs(dy) > Math.abs(dx)) return; // mostly vertical = scrolling
+const current = TABS.findIndex(t => document.getElementById('panel-'+t).classList.contains('active'));
+if (dx < 0 && current < TABS.length - 1) showTab(TABS[current + 1]); // swipe left → next
+if (dx > 0 && current > 0) showTab(TABS[current - 1]);               // swipe right → prev
+}, { passive: true });
+})();
+document.querySelectorAll('.bottom-nav-item').forEach(function(btn) {
+btn.addEventListener('click', function() {
+showTab(this.dataset.tab);
+});
+});</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
