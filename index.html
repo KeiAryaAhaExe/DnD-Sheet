@@ -19,7 +19,7 @@
 body{font-family:var(--fp);font-size:17px;background:var(--bg);color:var(--text);min-height:100vh;background-image:radial-gradient(ellipse at 20% 20%,rgba(200,165,90,0.04) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(200,80,40,0.03) 0%,transparent 50%)}
 
 /* ===== CHARACTER SELECT LOBBY ===== */
-#lobby{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.4s,visibility 0.4s}
+#lobby{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:env(safe-area-inset-top,0px);transition:opacity 0.4s,visibility 0.4s}
 #lobby.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .lobby-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .lobby-bg::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 40%,rgba(200,165,90,0.06) 0%,transparent 50%),radial-gradient(ellipse at 70% 60%,rgba(180,80,40,0.04) 0%,transparent 50%);animation:lobbyDrift 20s ease-in-out infinite alternate}
@@ -67,7 +67,7 @@ body{font-family:var(--fp);font-size:17px;background:var(--bg);color:var(--text)
 .modal-actions .modal-cancel:hover{border-color:var(--text2);color:var(--text2)}
 
 /* ===== HEADER ===== */
-.header{background:linear-gradient(180deg,#1a120a 0%,#0d0a07 100%);border-bottom:1px solid var(--border2);padding:18px 32px;display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+.header{background:linear-gradient(180deg,#1a120a 0%,#0d0a07 100%);border-bottom:1px solid var(--border2);padding:18px 32px;padding-top:calc(18px + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
 .header-title{font-family:var(--fc);font-size:22px;font-weight:700;color:var(--gold2);letter-spacing:3px;text-transform:uppercase}
 .header-sub{font-size:13px;color:var(--text3);letter-spacing:1px}
 .header-right{margin-left:auto;display:flex;gap:10px;align-items:center}
@@ -244,14 +244,14 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 /* ===== MOBILE ===== */
 @media (max-width:700px){
 html,body{overflow-x:hidden;width:100%}
-.header{padding:10px 14px;gap:10px}
+.header{padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px));gap:10px}
 .header-title{font-size:17px;letter-spacing:2px}
 .header-sub{font-size:11px}
 .header-right{gap:6px}
 .back-btn{font-size:9px;padding:6px 10px}
 .save-btn{font-size:10px;padding:6px 12px}
 .tabs{display:none}
-.bottom-nav{display:flex !important;position:fixed;bottom:0;left:0;right:0;background:#100d07;border-top:1px solid var(--border2);z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,0.6);flex-direction:column}
+.bottom-nav{display:flex !important;position:fixed;bottom:0;left:0;right:0;background:#100d07;border-top:1px solid var(--border2);z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,0.6);flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px)}
 .swipe-dots{display:flex;justify-content:center;gap:6px;padding:6px 0 2px}
 .swipe-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all 0.2s}
 .swipe-dot.active{background:var(--gold2);width:18px;border-radius:3px}
@@ -311,6 +311,30 @@ html,body{overflow-x:hidden;width:100%}
 .lobby-content{padding:20px 16px}
 .char-card{padding:14px 16px}
 }
+
+/* ===== POWER FULLSCREEN VIEWER ===== */
+.power-viewer-overlay{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.85);display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:all 0.3s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.power-viewer-overlay.show{opacity:1;visibility:visible}
+.power-viewer{flex:1;display:flex;flex-direction:column;max-width:700px;width:100%;margin:0 auto;padding:0 24px;padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto}
+.power-viewer-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-shrink:0}
+.power-viewer-close{background:transparent;border:1px solid var(--border2);color:var(--text2);width:40px;height:40px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
+.power-viewer-close:hover{border-color:var(--gold);color:var(--gold)}
+.power-viewer-title{font-family:var(--fc);font-size:22px;color:var(--gold2);font-weight:700;letter-spacing:1px;flex:1}
+.power-viewer-lv{font-family:var(--fc);font-size:13px;color:var(--text3);letter-spacing:1px;background:var(--bg3);border:1px solid var(--border);padding:4px 12px;flex-shrink:0}
+.power-viewer-body{font-family:var(--fp);font-size:18px;color:var(--text);line-height:1.8;white-space:pre-line;flex:1}
+.power-viewer-body::-webkit-scrollbar{width:4px}
+.power-viewer-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.power-slot{cursor:pointer;transition:border-color 0.2s}
+.power-slot:not(.empty):hover{border-color:var(--border2)}
+.power-slot:not(.empty):active{border-color:var(--gold)}
+.power-expand-hint{font-size:11px;color:var(--text3);opacity:0;transition:opacity 0.2s;margin-left:auto;font-family:var(--fc);letter-spacing:1px}
+.power-slot:not(.empty):hover .power-expand-hint{opacity:1}
+@media (max-width:700px){
+.power-viewer{padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.power-viewer-title{font-size:18px}
+.power-viewer-body{font-size:16px;line-height:1.7}
+.power-expand-hint{display:none}
+}
 </style>
 </head>
 <body>
@@ -336,6 +360,18 @@ html,body{overflow-x:hidden;width:100%}
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-confirm" id="modal-confirm" onclick="confirmModal()">Create</button>
     </div>
+  </div>
+</div>
+
+<!-- ===== POWER FULLSCREEN VIEWER ===== -->
+<div class="power-viewer-overlay" id="power-viewer-overlay" onclick="if(event.target===this)closePowerViewer()">
+  <div class="power-viewer">
+    <div class="power-viewer-header">
+      <button class="power-viewer-close" onclick="closePowerViewer()">✕</button>
+      <div class="power-viewer-title" id="power-viewer-title"></div>
+      <div class="power-viewer-lv" id="power-viewer-lv"></div>
+    </div>
+    <div class="power-viewer-body" id="power-viewer-body"></div>
   </div>
 </div>
 
@@ -1211,13 +1247,37 @@ function renderPowers() {
 <span class="slot-num">Slot ${p.slot}</span>
 <input class="power-name" type="text" value="${escHtml(p.name)}" placeholder="Power name..." oninput="powers[${i}].name=this.value;savePowers();updateSlotEmpty(${i})">
 <input class="power-lv" type="text" value="${escHtml(p.lv)}" placeholder="Lv" oninput="powers[${i}].lv=this.value;savePowers()">
+<span class="power-expand-hint">TAP TO VIEW</span>
 </div>
 <textarea class="power-desc" placeholder="Describe the power..." oninput="powers[${i}].desc=this.value;savePowers();updateSlotEmpty(${i})">${escHtml(p.desc)}</textarea>`;
+    // Tap to open fullscreen viewer (only if power has content)
+    div.addEventListener('click', function(e) {
+      // Don't trigger if user is interacting with inputs/textareas
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+      if (!powers[i].name && !powers[i].desc) return;
+      openPowerViewer(i);
+    });
     el.appendChild(div);
   });
 }
 function updateSlotEmpty(i) { const slots=document.querySelectorAll('.power-slot'); if(slots[i]) slots[i].classList.toggle('empty',!powers[i].name&&!powers[i].desc); }
 function savePowers() { cSave('powers', powers); }
+
+// ==================== POWER FULLSCREEN VIEWER ====================
+function openPowerViewer(i) {
+  const p = powers[i];
+  if (!p) return;
+  document.getElementById('power-viewer-title').textContent = p.name || 'Untitled Power';
+  document.getElementById('power-viewer-lv').textContent = p.lv ? 'Lv ' + p.lv : '';
+  document.getElementById('power-viewer-lv').style.display = p.lv ? '' : 'none';
+  document.getElementById('power-viewer-body').textContent = p.desc || '(No description)';
+  document.getElementById('power-viewer-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closePowerViewer() {
+  document.getElementById('power-viewer-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
 
 // ==================== INVENTORY (with inline editing & drag) ====================
 let inventory = [];
@@ -1533,7 +1593,10 @@ window.addEventListener('load', () => {
 });
 
 // Keyboard save shortcut
-document.addEventListener('keydown', e => { if ((e.ctrlKey||e.metaKey) && e.key==='s') { e.preventDefault(); if (activeCharId) saveData(); } });
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey||e.metaKey) && e.key==='s') { e.preventDefault(); if (activeCharId) saveData(); }
+  if (e.key === 'Escape') { closePowerViewer(); }
+});
 
 // Swipe navigation
 (function() {
